@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/add_document_iv"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_marginBottom="@dimen/dimen_8dp"
+        android:layout_marginLeft="@dimen/dimen_16dp"
+        android:layout_marginStart="@dimen/dimen_16dp"
+        android:layout_marginTop="@dimen/dimen_8dp"
+        android:contentDescription="@string/content"
+        android:src="@drawable/ic_add_document" />
+
+    <TextView
+        android:id="@+id/add_document_tv"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginLeft="@dimen/dimen_24dp"
+        android:layout_marginStart="@dimen/dimen_24dp"
+        android:layout_toEndOf="@+id/add_document_iv"
+        android:layout_toLeftOf="@+id/edit_document_iv"
+        android:layout_toRightOf="@+id/add_document_iv"
+        android:layout_toStartOf="@+id/edit_document_iv"
+        android:ellipsize="marquee"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:text="Add Document From Storage"
+        android:textColor="@color/text_normal"
+        android:textSize="14sp" />
+
+    <ImageView
+        android:id="@+id/edit_document_iv"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_marginBottom="@dimen/dimen_8dp"
+        android:layout_marginTop="@dimen/dimen_8dp"
+        android:layout_toLeftOf="@+id/remove_document_iv"
+        android:layout_toStartOf="@+id/remove_document_iv"
+        android:contentDescription="@string/content"
+        android:paddingLeft="14dp"
+        android:paddingStart="14dp"
+        android:src="@drawable/ic_edit"
+        android:tint="@color/text_normal" />
+
+    <ImageView
+        android:id="@+id/remove_document_iv"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="@dimen/dimen_8dp"
+        android:layout_marginEnd="@dimen/dimen_16dp"
+        android:layout_marginRight="@dimen/dimen_16dp"
+        android:layout_marginTop="@dimen/dimen_8dp"
+        android:contentDescription="@string/content"
+        android:paddingLeft="@dimen/dimen_8dp"
+        android:paddingStart="@dimen/dimen_8dp"
+        android:src="@drawable/ic_clear"
+        android:tint="@color/text_normal" />
+
+    <EditText
+        android:id="@+id/document_description_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/add_document_tv"
+        android:layout_marginBottom="@dimen/dimen_8dp"
+        android:layout_marginEnd="@dimen/dimen_16dp"
+        android:layout_marginLeft="@dimen/dimen_16dp"
+        android:layout_marginRight="@dimen/dimen_16dp"
+        android:layout_marginStart="@dimen/dimen_16dp"
+        android:layout_marginTop="@dimen/dimen_8dp"
+        android:hint="@string/description"
+        android:paddingBottom="@dimen/dimen_12dp"
+        android:paddingEnd="@dimen/dimen_16dp"
+        android:paddingLeft="@dimen/dimen_16dp"
+        android:paddingRight="@dimen/dimen_16dp"
+        android:paddingStart="@dimen/dimen_16dp"
+        android:paddingTop="@dimen/dimen_12dp"
+        android:textColor="@color/text_normal"
+        android:textSize="12sp"
+        android:visibility="gone" />
+</RelativeLayout>
