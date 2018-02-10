@@ -16,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
         wholeSellerLl= findViewById(R.id.wholesalors);
         profileLl= findViewById(R.id.myprofile);
 
+
     }
 
 }

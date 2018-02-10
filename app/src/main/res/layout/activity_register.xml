@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/shopp"
     android:orientation="vertical"
+    android:padding="16dp"
     android:paddingBottom="8dp">
 
 
@@ -12,10 +13,9 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
         android:background="#55000000"
         android:inputType="textPersonName"
-        android:padding="5dp"
         android:text="Name" />
 
     <EditText
@@ -27,7 +27,6 @@
         android:layout_marginTop="10dp"
         android:background="#55000000"
         android:inputType="textWebEmailAddress"
-        android:padding="5dp"
         android:text="E-mail" />
 
     <EditText
@@ -39,7 +38,6 @@
         android:layout_marginTop="10dp"
         android:background="#55000000"
         android:inputType="phone"
-        android:padding="5dp"
         android:text="Mobile Number" />
 
     <EditText
@@ -51,8 +49,8 @@
         android:layout_marginTop="10dp"
         android:background="#55000000"
         android:inputType="textPostalAddress"
-        android:padding="5dp"
-        android:text="shop address" />
+        android:text="Shop Address" />
+
     <EditText
         android:id="@+id/gst"
         android:layout_width="match_parent"
@@ -61,16 +59,38 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:background="#55000000"
-        android:padding="5dp"
         android:text="GST Number" />
-    <Button
+
+    <EditText
+        android:id="@+id/password"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:layout_below="@+id/gst"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:background="#55000000"
+        android:inputType="textVisiblePassword"
+        android:text="Password" />
+
+    <EditText
+        android:id="@+id/passwordcnf"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/password"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:background="#55000000"
+        android:inputType="textVisiblePassword"
+        android:text="Password Confirmation" />
+
+    <Button
+        android:id="@+id/register"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_alignParentBottom="true"
         android:layout_marginTop="10dp"
         android:background="#C4315AFF"
-        android:layout_alignParentBottom="true"
-        android:text="Register"
-        />
+        android:text="Register" />
 </RelativeLayout>
 
 
