@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "218569141161",
+    "firebase_url": "https://billauth-13b5e.firebaseio.com",
+    "project_id": "billauth-13b5e",
+    "storage_bucket": "billauth-13b5e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:218569141161:android:68789cba895918c7",
+        "android_client_info": {
+          "package_name": "com.bill_auth.merakions.bill_auth"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "218569141161-m1eidnn192h3ufkvdqns03bsoutjt76k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bill_auth.merakions.bill_auth",
+            "certificate_hash": "fe5127f505b2540711a8892129d3eb18839cab34"
+          }
+        },
+        {
+          "client_id": "218569141161-se3e2usav0f3dl15vqaqhc00da2eirl9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJ4Df5wtbJht0Saxbk1o9Li0r0GzLkzfw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "218569141161-se3e2usav0f3dl15vqaqhc00da2eirl9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
