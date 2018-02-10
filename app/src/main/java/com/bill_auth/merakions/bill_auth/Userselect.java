@@ -30,6 +30,7 @@ public class Userselect extends AppCompatActivity implements View.OnClickListene
             case R.id.shopkeeper:
                 Intent intent1=new Intent(this,Login.class);
                 startActivity(intent1);
+                break;
         }
     }
 }

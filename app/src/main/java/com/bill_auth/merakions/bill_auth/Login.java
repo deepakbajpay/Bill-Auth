@@ -11,20 +11,23 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class Login extends AppCompatActivity implements View.OnClickListener {
-    EditText email, password;
-    Button login;
-    TextView newUser;
+    EditText emailEt, passwordEt;
+    Button loginBt;
+    TextView newUserTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        email = findViewById(R.id.emaillogin);
-        password = findViewById(R.id.passwordenter);
-        login = findViewById(R.id.login);
-        newUser = findViewById(R.id.newuser);
+        emailEt = findViewById(R.id.emaillogin);
+        passwordEt = findViewById(R.id.passwordenter);
+        loginBt = findViewById(R.id.login);
+        newUserTv = findViewById(R.id.newuser);
 
-        newUser.setOnClickListener(this);
+        String email = emailEt.getText().toString().trim();
+        String password = passwordEt.getText().toString().trim();
+        loginBt.setOnClickListener(this);
+        newUserTv.setOnClickListener(this);
 
 
     }
@@ -35,6 +38,11 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             case R.id.newuser:
                 Intent intent = new Intent(this, RegisterActivity.class);
                 startActivity(intent);
+                break;
+
+            case R.id.login:
+                break;
+
         }
     }
 }
