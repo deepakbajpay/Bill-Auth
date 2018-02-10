@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/shopp"
+    android:orientation="vertical"
+    android:paddingBottom="8dp">
+
+
+    <EditText
+        android:id="@+id/name"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:background="#55000000"
+        android:inputType="textPersonName"
+        android:padding="5dp"
+        android:text="Name" />
+
+    <EditText
+        android:id="@+id/emailid"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/name"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:background="#55000000"
+        android:inputType="textWebEmailAddress"
+        android:padding="5dp"
+        android:text="E-mail" />
+
+    <EditText
+        android:id="@+id/Mobilenumber"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/emailid"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:background="#55000000"
+        android:inputType="phone"
+        android:padding="5dp"
+        android:text="Mobile Number" />
+
+    <EditText
+        android:id="@+id/shop"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/Mobilenumber"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:background="#55000000"
+        android:inputType="textPostalAddress"
+        android:padding="5dp"
+        android:text="shop address" />
+    <EditText
+        android:id="@+id/gst"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/shop"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:background="#55000000"
+        android:padding="5dp"
+        android:text="GST Number" />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:background="#C4315AFF"
+        android:layout_alignParentBottom="true"
+        android:text="Register"
+        />
+</RelativeLayout>
+
+
+
