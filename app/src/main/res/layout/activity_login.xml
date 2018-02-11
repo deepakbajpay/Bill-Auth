@@ -25,7 +25,7 @@
             android:layout_marginTop="20dp"
             android:background="#55000000"
             android:inputType="textWebEmailAddress"
-            android:text="Email" />
+            android:text="asd@gmail.com" />
 
         <EditText
             android:id="@+id/passwordenter"
@@ -37,7 +37,7 @@
             android:layout_marginTop="20dp"
             android:background="#55000000"
             android:inputType="textVisiblePassword"
-            android:text="Password" />
+            android:text="password" />
         <Button
             android:id="@+id/login"
             android:layout_width="match_parent"

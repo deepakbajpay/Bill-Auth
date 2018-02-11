@@ -3,4 +3,8 @@
     <string name="content">Content</string>
     <string name="description">Description</string>
     <string name="add_documents_from_storage">Add document from storage</string>
+    <string name="max_upload_limit_formatted">Max Upload Limit ( %1$s / 5 MB )</string>
+    <string name="photo_number_format">( Total : %1$d )</string>
+
+    <string name="max_upload_limit">Max Upload Limit ( 5 MB )</string>
 </resources>
