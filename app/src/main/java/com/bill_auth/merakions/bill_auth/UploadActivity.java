@@ -14,6 +14,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -24,11 +25,21 @@ import com.bill_auth.merakions.bill_auth.adapters.AddPhotoAdapter;
 import com.bill_auth.merakions.bill_auth.utils.Constants;
 import com.bill_auth.merakions.bill_auth.utils.FileUtil;
 import com.bill_auth.merakions.bill_auth.utils.Utilities;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import droidninja.filepicker.FilePickerBuilder;
 import droidninja.filepicker.FilePickerConst;
@@ -47,6 +58,10 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
     private TextView photoAmountTv;
     private TextView documentAmountTv;
     private TextView uploadAllMessagesTv;
+    private StorageReference mStorageRef;
+    HashMap<String,Uri> downloadUrls;
+    private String recieverUid;
+    private int i;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +71,9 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
 
         imageList = new ArrayList<>();
         selectedFiles = new ArrayList<>();
+        downloadUrls = new HashMap<>();
+
+        recieverUid = "sdfsfwerwefsgwrwew1ADFSFSD";
 
         uploadPhotosRv = findViewById(R.id.upload_photos_rv);
         uploadDocumentsRv = findViewById(R.id.upload_documents_rv);
@@ -373,5 +391,68 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         uploadAllMessagesTv.setText(getString(R.string.max_upload_limit_formatted, df.format(number)));
     }
 
+
+    private void uploadFromUri(final ArrayList<String> fileUris) {
+        mStorageRef = FirebaseStorage.getInstance().getReference();
+        try {
+
+            final StorageReference photoRef = mStorageRef.child("bills").child(Utilities.getUid(this))
+                    .child(fileUris.get(i));
+            Uri fileUri;
+            if (Build.VERSION.SDK_INT < 24)
+                fileUri = Uri.fromFile(new File(fileUris.get(i)));
+            else
+                fileUri = FileProvider.getUriForFile(this,
+                        this.getApplicationContext().getPackageName() + ".com.apps.edusip.ezegst.provider", new File(fileUris.get(i)));
+
+            photoRef.putFile(fileUri)
+                    .addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            // Upload succeeded
+                            Log.d(null, "uploadFromUri:onSuccess");
+                            // Get the public download URL
+                            Uri mDownloadUrl = taskSnapshot.getDownloadUrl();
+
+                            downloadUrls.put(recieverUid,mDownloadUrl);
+                            if (i<fileUris.size()-1){
+                                i++;
+                                uploadFromUri(fileUris);
+                            }else{
+                                mapFileNamesAndReciever();
+                            }
+
+                        }
+                    })
+                    .addOnFailureListener(this, new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // Upload failed
+
+                            Log.w(null, "uploadFromUri:onFailure", exception);
+                            Toast.makeText(UploadActivity.this, "" + exception.getMessage(),
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void mapFileNamesAndReciever() {
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
+        dbRef.child(Constants.CHILD_BILLS).setValue(downloadUrls).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Toast.makeText(UploadActivity.this, "Files Uploaded Successfuly", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e("mapFiles",e.getLocalizedMessage());
+                Toast.makeText(UploadActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
 }

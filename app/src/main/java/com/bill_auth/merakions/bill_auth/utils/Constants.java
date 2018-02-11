@@ -26,6 +26,8 @@ public class Constants {
 
     public static final String CHILD_WHOLE_SALER = "wholesaler";
     public static final String CHILD_SHOP_KEEPER = "shop_keeper";
+    public static final String CHILD_BILLS = "bills";
+
     public static final String USER_TYPE_TAG = "user_type";
     public static final String WHOLE_SALER = "wholesaller";
     public static final String SHOP_KEEPER = "shop_keeper";
@@ -36,6 +38,7 @@ public class Constants {
     public static final int CAMERA_PERMISSION_CODE = 1001;
     public static final int DOCUMENT_PIC_PERMISSION_CODE = 1002;
     public static final int CODE_CLICK_IMAGE = 1003;
+
 
     public static int STORAGE_PERMISSION_CODE = 1004;
     public static int MAX_UPLOADABLE_SIZE_MB = 5;

@@ -34,6 +34,11 @@ public class Utilities {
         mPref.putString(Constants.PREF_USER_TYPE, Constants.WHOLE_SALER);
         mPref.apply();
     }
+
+    public static String getUid(Context context){
+        SharedPreferences mPref = context.getSharedPreferences(Constants.WHOLE_SALER_PREF_TAG,Context.MODE_PRIVATE);
+        return mPref.getString(Constants.USER_PREF_UID,"");
+    }
     public static void showAlert(Context context, String title, String message, String positiveText, String negativeText) {
 
         new MaterialDialog.Builder(context)
