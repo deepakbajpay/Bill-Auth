@@ -6,20 +6,20 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class WholeMainactivity extends AppCompatActivity implements View.OnClickListener {
 
-    LinearLayout newBillLl,billHistoryLl,wholeSellerLl,profileLl;
+    LinearLayout sendBillLl,billHistoryLl,shopkeeperLl,profileLl;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        newBillLl =  findViewById(R.id.newbills);
+        sendBillLl =  findViewById(R.id.newbills);
         billHistoryLl= findViewById(R.id.billhistory);
-        wholeSellerLl= findViewById(R.id.wholesalors);
+        shopkeeperLl= findViewById(R.id.wholesalors);
         profileLl= findViewById(R.id.myprofile);
 
-        newBillLl.setOnClickListener(this);
-        billHistoryLl.setOnClickListener(this);
+        sendBillLl.setOnClickListener(this);
+
     }
 
     @Override
@@ -28,11 +28,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.newbills:
                 Intent intent = new Intent(this,UploadActivity.class);
                 startActivity(intent);
-
-                break;
-            case R.id.billhistory:
-                Intent intent1 = new Intent(this,Shopkeeperdocview.class);
-                startActivity(intent1);
 
                 break;
         }

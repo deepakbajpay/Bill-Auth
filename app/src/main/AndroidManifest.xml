@@ -11,7 +11,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity" />
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".Login"></activity>
+        <activity android:name=".Login" />
         <activity android:name=".Userselect">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,7 +19,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".UploadActivity"></activity>
+        <activity android:name=".UploadActivity" />
+        <activity android:name=".WholeMainactivity" />
+        <activity android:name=".Shopkeeperdocview"></activity>
     </application>
 
 </manifest>

@@ -2,9 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/BillAuth.iml" filepath="$PROJECT_DIR$/BillAuth.iml" />
       <module fileurl="file://C:\Users\bajpa\StudioProjects\bill-auth\BillAuth.iml" filepath="C:\Users\bajpa\StudioProjects\bill-auth\BillAuth.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/bill-auth.iml" filepath="$PROJECT_DIR$/bill-auth.iml" />
+      <module fileurl="file://C:\Users\Hardik\Downloads\Compressed\BillAuth\bill-auth.iml" filepath="C:\Users\Hardik\Downloads\Compressed\BillAuth\bill-auth.iml" />
     </modules>
   </component>
 </project>

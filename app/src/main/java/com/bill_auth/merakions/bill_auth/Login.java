@@ -86,9 +86,16 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 if (task.isSuccessful()) {
                     uid = mAuth.getCurrentUser().getUid();
                     FirebaseMessaging.getInstance().subscribeToTopic(uid);
-                    Intent intent = new Intent(Login.this,MainActivity.class);
-                    intent.putExtra(Constants.USER_TYPE_TAG,userType);
-                    startActivity(intent);
+                    if (userType==Constants.WHOLE_SALER){
+                        Intent intent = new Intent(Login.this,WholeMainactivity.class);
+                        intent.putExtra(Constants.USER_TYPE_TAG,userType);
+                        startActivity(intent);
+
+                    }else {
+                        Intent intent = new Intent(Login.this, MainActivity.class);
+                        intent.putExtra(Constants.USER_TYPE_TAG, userType);
+                        startActivity(intent);
+                    }
 
                 } else {
                     hideAvi();
