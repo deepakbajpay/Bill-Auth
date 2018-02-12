@@ -8,4 +8,5 @@
 
     <string name="max_upload_limit">Max Upload Limit ( 5 MB )</string>
     <string name="logout">Logout</string>
+    <string name="notification_title">You have a new notification</string>
 </resources>

@@ -56,6 +56,11 @@ public class Utilities {
         return mPref.getString(Constants.PREF_USER_TYPE, "");
     }
 
+    public static void clearSharedPrefs(Context context){
+        context.getSharedPreferences(Constants.WHOLE_SALER_PREF_TAG, Context.MODE_PRIVATE).edit().clear().apply();
+
+    }
+
     public static void showAlert(Context context, String title, String message, String positiveText, String negativeText) {
 
         new MaterialDialog.Builder(context)

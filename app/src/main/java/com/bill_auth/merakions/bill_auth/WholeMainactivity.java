@@ -9,6 +9,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.bill_auth.merakions.bill_auth.utils.Constants;
+import com.bill_auth.merakions.bill_auth.utils.Utilities;
+
 public class WholeMainactivity extends AppCompatActivity implements View.OnClickListener {
 
     LinearLayout sendBillLl,billHistoryLl,shopkeeperLl,profileLl;
@@ -38,7 +41,8 @@ public class WholeMainactivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        return super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.context_menu,menu);
+        return true;
     }
 
     @Override
@@ -50,5 +54,14 @@ public class WholeMainactivity extends AppCompatActivity implements View.OnClick
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void logout() {
+        Utilities.clearSharedPrefs(this);
+        Intent intent = new Intent(this, UserSelectActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 }

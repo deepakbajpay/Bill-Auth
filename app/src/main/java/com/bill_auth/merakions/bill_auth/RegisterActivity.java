@@ -107,6 +107,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     user.setuId(task.getResult().getUser().getUid());
+                    FirebaseMessaging.getInstance().subscribeToTopic(task.getResult().getUser().getUid());
                     Toast.makeText(RegisterActivity.this, "Registered...", Toast.LENGTH_SHORT).show();
                     uploadDetails();
                 } else {

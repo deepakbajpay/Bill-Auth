@@ -106,7 +106,6 @@ public class ActivityLogin extends AppCompatActivity implements View.OnClickList
                 if (task.isSuccessful()) {
                     uid = mAuth.getCurrentUser().getUid();
                     FirebaseMessaging.getInstance().subscribeToTopic(uid);
-
                     openActivity(uid);
                    /* if (userType == Constants.WHOLE_SALER) {
                         Intent intent = new Intent(ActivityLogin.this, WholeMainactivity.class);
