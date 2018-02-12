@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bill_auth.merakions.bill_auth.utils.Constants;
+import com.bill_auth.merakions.bill_auth.utils.Utilities;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -37,6 +38,18 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        if (!TextUtils.isEmpty(Utilities.getUid(this))){
+            if (userType==Constants.WHOLE_SALER){
+                Intent intent = new Intent(Login.this,WholeMainactivity.class);
+                intent.putExtra(Constants.USER_TYPE_TAG,userType);
+                startActivity(intent);
+
+            }else {
+                Intent intent = new Intent(Login.this, MainActivity.class);
+                intent.putExtra(Constants.USER_TYPE_TAG, userType);
+                startActivity(intent);
+            }
+        }
         userType = getIntent().getStringExtra(Constants.USER_TYPE_TAG);
         mAuth = FirebaseAuth.getInstance();
 

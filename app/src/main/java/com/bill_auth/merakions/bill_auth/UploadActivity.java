@@ -39,7 +39,9 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Map;
 
 import droidninja.filepicker.FilePickerBuilder;
 import droidninja.filepicker.FilePickerConst;
@@ -59,7 +61,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
     private TextView documentAmountTv;
     private TextView uploadAllMessagesTv;
     private StorageReference mStorageRef;
-    HashMap<String,Uri> downloadUrls;
+    Map<String,String> downloadUrls;
     private String recieverUid;
     private int i;
 
@@ -73,7 +75,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         selectedFiles = new ArrayList<>();
         downloadUrls = new HashMap<>();
 
-        recieverUid = "sdfsfwerwefsgwrwew1ADFSFSD";
+        recieverUid = Utilities.getUid(this);
 
         uploadPhotosRv = findViewById(R.id.upload_photos_rv);
         uploadDocumentsRv = findViewById(R.id.upload_documents_rv);
@@ -104,7 +106,11 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.upload_documents_button:
-
+                ArrayList<String> list = new ArrayList<>();
+                list.addAll(imageList);
+                list.addAll(selectedFiles);
+                i=0;
+                uploadFromUri(list);
                 break;
         }
     }
@@ -285,7 +291,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
                     if (Build.VERSION.SDK_INT < 24)
                         photoURI = Uri.fromFile(photoFile);
                     else
-                        photoURI = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName() + ".com.apps.edusip.ezegst.provider", photoFile);
+                        photoURI = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName() + ".com.bill_auth.merakions.bill_auth.provider", photoFile);
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                     this.startActivityForResult(takePictureIntent, Constants.CODE_CLICK_IMAGE);
                 } catch (Exception e) {
@@ -396,14 +402,16 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         mStorageRef = FirebaseStorage.getInstance().getReference();
         try {
 
-            final StorageReference photoRef = mStorageRef.child("bills").child(Utilities.getUid(this))
-                    .child(fileUris.get(i));
+
             Uri fileUri;
             if (Build.VERSION.SDK_INT < 24)
                 fileUri = Uri.fromFile(new File(fileUris.get(i)));
             else
                 fileUri = FileProvider.getUriForFile(this,
-                        this.getApplicationContext().getPackageName() + ".com.apps.edusip.ezegst.provider", new File(fileUris.get(i)));
+                        this.getApplicationContext().getPackageName() + ".com.bill_auth.merakions.bill_auth.provider", new File(fileUris.get(i)));
+
+            final StorageReference photoRef = mStorageRef.child("bills").child(Utilities.getUid(this))
+                    .child(fileUri.getLastPathSegment());
 
             photoRef.putFile(fileUri)
                     .addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -414,12 +422,12 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
                             // Get the public download URL
                             Uri mDownloadUrl = taskSnapshot.getDownloadUrl();
 
-                            downloadUrls.put(recieverUid,mDownloadUrl);
+                            downloadUrls.put(getDate()+"",mDownloadUrl.toString());
                             if (i<fileUris.size()-1){
                                 i++;
                                 uploadFromUri(fileUris);
                             }else{
-                                mapFileNamesAndReciever();
+                                mapFileNamesAndReciever(recieverUid);
                             }
 
                         }
@@ -439,9 +447,10 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    private void mapFileNamesAndReciever() {
-        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
-        dbRef.child(Constants.CHILD_BILLS).setValue(downloadUrls).addOnCompleteListener(new OnCompleteListener<Void>() {
+    private void mapFileNamesAndReciever(String recieverUid) {
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child(Constants.CHILD_BILLS).child(recieverUid);
+        System.out.println("UploadActivity.mapFileNamesAndReciever "+downloadUrls);
+        dbRef.setValue(downloadUrls).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 Toast.makeText(UploadActivity.this, "Files Uploaded Successfuly", Toast.LENGTH_SHORT).show();
@@ -453,6 +462,11 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
                 Toast.makeText(UploadActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public long getDate() {
+        Calendar calendar = Calendar.getInstance();
+        return calendar.getTimeInMillis();
     }
 
 }

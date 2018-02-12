@@ -152,7 +152,7 @@ public class FileUtil {
         File compressedImage = null;
         try {
             actualImage = FileUtil.from(context, FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName()
-                    + ".com.apps.edusip.ezegst.provider", new File(photoPath)));
+                    + ".com.bill_auth.merakions.bill_auth.provider", new File(photoPath)));
             compressedImage = new Compressor(context)
                     .setMaxWidth(640)
                     .setMaxHeight(1200)
