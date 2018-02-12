@@ -23,7 +23,7 @@ import java.util.Date;
 public class Utilities {
 
 
-    public static void saveUserDetails(Context context, UserItem userItem){
+    public static void saveUserDetails(Context context, UserItem userItem) {
         SharedPreferences.Editor mPref = context.getSharedPreferences(Constants.WHOLE_SALER_PREF_TAG, Context.MODE_PRIVATE).edit();
 
         mPref.putString(Constants.USER_PREF_UID, userItem.getuId());
@@ -35,10 +35,27 @@ public class Utilities {
         mPref.apply();
     }
 
-    public static String getUid(Context context){
-        SharedPreferences mPref = context.getSharedPreferences(Constants.WHOLE_SALER_PREF_TAG,Context.MODE_PRIVATE);
-        return mPref.getString(Constants.USER_PREF_UID,"");
+    public static UserItem getSavedUserDetails(Context context) {
+        SharedPreferences mPref = context.getSharedPreferences(Constants.WHOLE_SALER_PREF_TAG, Context.MODE_PRIVATE);
+        UserItem userItem = new UserItem();
+        userItem.setuId(mPref.getString(Constants.USER_PREF_UID, ""));
+        userItem.setName(mPref.getString(Constants.USER_PREF_USER_NAME, ""));
+        userItem.setAddress(mPref.getString(Constants.USER_PREF_ADDRESS, ""));
+        userItem.setEmail(mPref.getString(Constants.USER_PREF_EMAIL, ""));
+        userItem.setMobile(mPref.getString(Constants.USER_PREF_MOBILE, ""));
+        return userItem;
     }
+
+    public static String getUid(Context context) {
+        SharedPreferences mPref = context.getSharedPreferences(Constants.WHOLE_SALER_PREF_TAG, Context.MODE_PRIVATE);
+        return mPref.getString(Constants.USER_PREF_UID, "");
+    }
+
+    public static String getUserType(Context context) {
+        SharedPreferences mPref = context.getSharedPreferences(Constants.WHOLE_SALER_PREF_TAG, Context.MODE_PRIVATE);
+        return mPref.getString(Constants.PREF_USER_TYPE, "");
+    }
+
     public static void showAlert(Context context, String title, String message, String positiveText, String negativeText) {
 
         new MaterialDialog.Builder(context)

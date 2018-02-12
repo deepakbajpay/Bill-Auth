@@ -38,6 +38,7 @@ public class Constants {
     public static final int CAMERA_PERMISSION_CODE = 1001;
     public static final int DOCUMENT_PIC_PERMISSION_CODE = 1002;
     public static final int CODE_CLICK_IMAGE = 1003;
+    public static final String U_ID_TAG = "u_id";
 
 
     public static int STORAGE_PERMISSION_CODE = 1004;

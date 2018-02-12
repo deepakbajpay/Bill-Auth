@@ -137,7 +137,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                         System.out.println("DatabaseHandler.onComplete in upload details");
                         FirebaseMessaging.getInstance().subscribeToTopic(user.getuId());
                         Utilities.saveUserDetails(RegisterActivity.this, user);
-                        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                        Intent intent = new Intent(RegisterActivity.this, ShopKeeperMainActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
