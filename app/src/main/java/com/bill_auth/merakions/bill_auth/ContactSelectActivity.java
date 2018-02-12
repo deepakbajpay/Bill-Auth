@@ -60,4 +60,5 @@ public class ContactSelectActivity extends AppCompatActivity implements View.OnC
                 break;
         }
     }
+
 }
