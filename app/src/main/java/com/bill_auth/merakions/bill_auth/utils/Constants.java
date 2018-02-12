@@ -39,8 +39,9 @@ public class Constants {
     public static final int DOCUMENT_PIC_PERMISSION_CODE = 1002;
     public static final int CODE_CLICK_IMAGE = 1003;
     public static final String U_ID_TAG = "u_id";
-    public static final String TAG_WHOLE_SALER_ACTIVITY = "shop_keeper_activity";
+    public static final String TAG_WHOLE_SALER_ACTIVITY = "whole_saler_keeper_activity";
     public static final String TAG_ACTIVITY_NAME = "activity_name";
+    public static final String TAG_SHOP_KEEPER_ACTIVITY ="shop_keeper_activity" ;
 
 
     public static int STORAGE_PERMISSION_CODE = 1004;

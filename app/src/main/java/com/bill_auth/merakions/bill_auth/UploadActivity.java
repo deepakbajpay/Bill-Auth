@@ -24,6 +24,7 @@ import com.bill_auth.merakions.bill_auth.adapters.AddDocumentsAdapter;
 import com.bill_auth.merakions.bill_auth.adapters.AddPhotoAdapter;
 import com.bill_auth.merakions.bill_auth.utils.Constants;
 import com.bill_auth.merakions.bill_auth.utils.FileUtil;
+import com.bill_auth.merakions.bill_auth.utils.NotificationHandler;
 import com.bill_auth.merakions.bill_auth.utils.Utilities;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -448,7 +449,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    private void mapFileNamesAndReciever(String recieverUid) {
+    private void mapFileNamesAndReciever(final String recieverUid) {
         DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child(Constants.CHILD_BILLS).child(recieverUid);
         System.out.println("UploadActivity.mapFileNamesAndReciever "+downloadUrls);
         dbRef.setValue(downloadUrls).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -461,6 +462,8 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
                 addPhotoAdapter.notifyDataSetChanged();
                 totalFileSize = 0;
                 updateFileSizeText(totalFileSize);
+                NotificationHandler.pushNotificationInFirebase(Utilities.getUid(UploadActivity.this)
+                ,"You have new bills", Constants.TAG_SHOP_KEEPER_ACTIVITY,recieverUid);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
