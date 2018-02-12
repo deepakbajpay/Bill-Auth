@@ -2,12 +2,46 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="8dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:baselineAligned="false"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/searchenter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="search here"></EditText>
+        <ImageView
+            android:id="@+id/searchclick"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_research"
+            ></ImageView>
+        >
+    </RelativeLayout>
+    <com.wang.avi.AVLoadingIndicatorView
+        android:id="@+id/avi_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        app:indicatorColor="@color/colorPrimary"
+        app:indicatorName="BallPulseSyncIndicator" />
+
+
 
     <ListView
         android:id="@+id/doclist"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
         android:divider="#ff7ab59c"
         android:dividerHeight="1dp"
         android:listSelector="@drawable/list_selector"
