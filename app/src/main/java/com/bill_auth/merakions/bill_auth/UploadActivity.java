@@ -70,6 +70,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload);
 
+        recieverUid = getIntent().getStringExtra(Constants.U_ID_TAG);
 
         imageList = new ArrayList<>();
         selectedFiles = new ArrayList<>();
@@ -454,6 +455,12 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 Toast.makeText(UploadActivity.this, "Files Uploaded Successfuly", Toast.LENGTH_SHORT).show();
+                imageList.clear();
+                selectedFiles.clear();
+                addDocumentsAdapter.notifyDataSetChanged();
+                addPhotoAdapter.notifyDataSetChanged();
+                totalFileSize = 0;
+                updateFileSizeText(totalFileSize);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

@@ -6,11 +6,23 @@ package com.bill_auth.merakions.bill_auth.beanclasses;
 
 public class ContactItem {
 
-    String contactname, getContactaddress;
+    String contactname;
+    String getContactaddress;
+    String uId;
 
+    public ContactItem(){
+
+    }
     public ContactItem(String contactname, String contactaddress) {
         this.contactname = contactname;
         this.getContactaddress = contactaddress;
+    }
+    public String getuId() {
+        return uId;
+    }
+
+    public void setuId(String uId) {
+        this.uId = uId;
     }
 
     public String getContactname() {

@@ -16,9 +16,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity" />
+        <activity android:name=".ShopKeeperMainActivity" />
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".Login" />
+        <activity android:name=".ActivityLogin" />
         <provider
             android:name=".utils.GenericFileProvider"
             android:authorities="${applicationId}.com.bill_auth.merakions.bill_auth.provider"
@@ -29,7 +29,7 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity android:name=".Userselect">
+        <activity android:name=".UserSelectActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -38,7 +38,9 @@
         </activity>
         <activity android:name=".UploadActivity" />
         <activity android:name=".WholeMainactivity" />
-        <activity android:name=".Shopkeeperdocview"></activity>
+        <activity android:name=".Shopkeeperdocview"/>
+        <activity android:name=".ContactSelectActivity"/>
+
     </application>
 
 </manifest>

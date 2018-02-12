@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class ShopKeeperMainActivity extends AppCompatActivity implements View.OnClickListener {
 
     LinearLayout newBillLl,billHistoryLl,wholeSellerLl,profileLl;
     @Override
