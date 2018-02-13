@@ -2,8 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.bill_auth.merakions.bill_auth">
 
-
-
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -39,6 +37,8 @@
         <activity android:name=".UploadActivity" />
         <activity android:name=".WholeMainactivity" />
         <activity android:name=".Shopkeeperdocview"/>
+        <activity android:name=".BillHistoryActivity"/>
+        <activity android:name=".ProfileActivity"/>
         <activity android:name=".ContactSelectActivity"/>
 
 
