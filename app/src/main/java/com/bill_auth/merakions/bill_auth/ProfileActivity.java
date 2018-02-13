@@ -26,13 +26,6 @@ public class ProfileActivity extends AppCompatActivity {
         shopEt=findViewById(R.id.shopP);
         gstEt=findViewById(R.id.gstP);
 
-        String name=nameEt.getText().toString().trim();
-
-        String mobile=nameEt.getText().toString().trim();
-        String email=emailEt.getText().toString().trim();
-        String shop=shopEt.getText().toString().trim();
-        String gst=gstEt.getText().toString().trim();
-
         fetchUserProfile();
     }
 
