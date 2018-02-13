@@ -26,11 +26,14 @@ public class ProfileActivity extends AppCompatActivity {
         shopEt=findViewById(R.id.shopP);
         gstEt=findViewById(R.id.gstP);
 
-        fetchUserProfile();
+        setUserValues();
     }
 
-    private void fetchUserProfile(){
-        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
+    private void setUserValues(){
+        UserItem userItem = Utilities.getSavedUserDetails(this);
+
+
+       /* DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
         if (Constants.WHOLE_SALER.equals(Utilities.getUserType(this))){
             dbRef = dbRef.child(Constants.CHILD_WHOLE_SALER);
         }else
@@ -47,6 +50,6 @@ public class ProfileActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+        });*/
     }
 }
