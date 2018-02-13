@@ -34,7 +34,7 @@ public class NotificationHandler {
                 public void run() {
                     String url = "https://fcm.googleapis.com/fcm/send";
                     String result = "";
-                    String clientkey = "AAAAMuO8a6k:APA91bFTD_Y2CsOh0LaLrCcIbwFzNJM0hZiTFCGX_V1y-GOQX16oWmpqaDAhNUxMtVhOlPVRACa2moNhq24DZ6LCDBKM1U681Z_oBRpFhG11X7hp26NaiJwNTFKaJDrQXXxEpVNGnf0r";
+                    String clientkey = "key=AAAAMuO8a6k:APA91bFTD_Y2CsOh0LaLrCcIbwFzNJM0hZiTFCGX_V1y-GOQX16oWmpqaDAhNUxMtVhOlPVRACa2moNhq24DZ6LCDBKM1U681Z_oBRpFhG11X7hp26NaiJwNTFKaJDrQXXxEpVNGnf0r";
                     HttpURLConnection httpcon = null;
                     try {
                         //Connect
