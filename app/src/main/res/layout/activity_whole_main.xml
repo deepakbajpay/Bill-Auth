@@ -38,7 +38,8 @@
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:paddingTop="1dp"
-                    android:src="@drawable/document" />
+                    android:layout_marginTop="16dp"
+                    android:src="@drawable/ic_sendbill" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -72,7 +73,7 @@
                     android:layout_height="60dp"
                     android:paddingTop="1dp"
                     android:layout_marginTop="16dp"
-                    android:src="@drawable/previousbills" />
+                    android:src="@drawable/ic_billhistory" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -112,7 +113,7 @@
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:paddingTop="1dp"
-                    android:src="@drawable/whole" />
+                    android:src="@drawable/ic_handshake" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -146,7 +147,7 @@
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:paddingTop="8dp"
-                    android:src="@drawable/profile" />
+                    android:src="@drawable/ic_user" />
 
                 <TextView
                     android:layout_width="match_parent"

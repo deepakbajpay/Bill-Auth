@@ -20,13 +20,15 @@ public class ShopKeeperMainActivity extends AppCompatActivity implements View.On
 
         newBillLl.setOnClickListener(this);
         billHistoryLl.setOnClickListener(this);
+        profileLl.setOnClickListener(this);
+        wholeSellerLl.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.newbills:
-                Intent intent = new Intent(this,UploadActivity.class);
+                Intent intent = new Intent(this,Shopkeeperdocview.class);
                 startActivity(intent);
 
                 break;
@@ -34,6 +36,15 @@ public class ShopKeeperMainActivity extends AppCompatActivity implements View.On
                 Intent intent1 = new Intent(this,Shopkeeperdocview.class);
                 startActivity(intent1);
 
+                break;
+
+            case  R.id.myprofile:
+                Intent intent2 =new Intent(this,ProfileActivity.class);
+                startActivity(intent2);
+                break;
+            case  R.id.wholesalors:
+                Intent intent3=new Intent(this,ContactSelectActivity.class);
+                startActivity(intent3);
                 break;
         }
     }

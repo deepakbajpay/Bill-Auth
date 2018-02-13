@@ -25,7 +25,9 @@ public class WholeMainactivity extends AppCompatActivity implements View.OnClick
         profileLl= findViewById(R.id.myprofileWs);
 
         sendBillLl.setOnClickListener(this);
-
+        billHistoryLl.setOnClickListener(this);
+        profileLl.setOnClickListener(this);
+        shopkeeperLl.setOnClickListener(this);
     }
 
     @Override
@@ -36,6 +38,19 @@ public class WholeMainactivity extends AppCompatActivity implements View.OnClick
                 startActivity(intent);
 
                 break;
+            case R.id.billhistoryWs:
+                Intent intent1 = new Intent(this,BillHistoryActivity.class);
+                startActivity(intent1);
+                break;
+            case R.id.myprofileWs:
+                Intent intent2 = new Intent(this,ProfileActivity.class);
+                startActivity(intent2);
+                break;
+            case R.id.shopkeeperWs:
+                Intent intent3=new Intent(this,ContactSelectActivity.class);
+                startActivity(intent3);
+                break;
+
         }
     }
 
