@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.bill_auth.merakions.bill_auth.adapters.AddDocumentsAdapter;
 import com.bill_auth.merakions.bill_auth.adapters.AddPhotoAdapter;
+import com.bill_auth.merakions.bill_auth.beanclasses.BillItem;
 import com.bill_auth.merakions.bill_auth.utils.Constants;
 import com.bill_auth.merakions.bill_auth.utils.FileUtil;
 import com.bill_auth.merakions.bill_auth.utils.NotificationHandler;
@@ -52,6 +53,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
     AddPhotoAdapter addPhotoAdapter;
     AddDocumentsAdapter addDocumentsAdapter;
     DecimalFormat df = new DecimalFormat("0.00");
+    Map<String, BillItem> downloadUrls;
     private RecyclerView uploadPhotosRv, uploadDocumentsRv;
     private Button uploadButton;
     private ArrayList<String> imageList;
@@ -62,7 +64,6 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
     private TextView documentAmountTv;
     private TextView uploadAllMessagesTv;
     private StorageReference mStorageRef;
-    Map<String,String> downloadUrls;
     private String recieverUid;
     private int i;
 
@@ -76,7 +77,6 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         imageList = new ArrayList<>();
         selectedFiles = new ArrayList<>();
         downloadUrls = new HashMap<>();
-
         recieverUid = Utilities.getUid(this);
 
         uploadPhotosRv = findViewById(R.id.upload_photos_rv);
@@ -111,7 +111,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
                 ArrayList<String> list = new ArrayList<>();
                 list.addAll(imageList);
                 list.addAll(selectedFiles);
-                i=0;
+                i = 0;
                 uploadFromUri(list);
                 break;
         }
@@ -424,11 +424,18 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
                             // Get the public download URL
                             Uri mDownloadUrl = taskSnapshot.getDownloadUrl();
 
-                            downloadUrls.put(getDate()+"",mDownloadUrl.toString());
-                            if (i<fileUris.size()-1){
+                            BillItem billItem = new BillItem();
+                            billItem.setBillUrl(mDownloadUrl.toString());
+                            billItem.setTimestamp(getDate());
+                            billItem.setVerify(false);
+                            billItem.setSenderUid(Utilities.getUid(UploadActivity.this));
+                            billItem.setReceiverUid(recieverUid);
+                            downloadUrls.put(getDate()+"",billItem);
+
+                            if (i < fileUris.size() - 1) {
                                 i++;
                                 uploadFromUri(fileUris);
-                            }else{
+                            } else {
                                 mapFileNamesAndReciever(recieverUid);
                             }
 
@@ -450,8 +457,8 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void mapFileNamesAndReciever(final String recieverUid) {
-        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child(Constants.CHILD_BILLS).child(recieverUid);
-        System.out.println("UploadActivity.mapFileNamesAndReciever "+downloadUrls);
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child(Constants.CHILD_BILLS).child(Utilities.getUid(this)).child(recieverUid);
+        System.out.println("UploadActivity.mapFileNamesAndReciever " + downloadUrls);
         dbRef.setValue(downloadUrls).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -460,15 +467,16 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
                 selectedFiles.clear();
                 addDocumentsAdapter.notifyDataSetChanged();
                 addPhotoAdapter.notifyDataSetChanged();
+                downloadUrls.clear();
                 totalFileSize = 0;
                 updateFileSizeText(totalFileSize);
                 NotificationHandler.pushNotificationInFirebase(Utilities.getUid(UploadActivity.this)
-                ,"You have new bills", Constants.TAG_SHOP_KEEPER_ACTIVITY,recieverUid);
+                        , "You have new bills", Constants.TAG_SHOP_KEEPER_ACTIVITY, recieverUid);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.e("mapFiles",e.getLocalizedMessage());
+                Log.e("mapFiles", e.getLocalizedMessage());
                 Toast.makeText(UploadActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
             }
         });

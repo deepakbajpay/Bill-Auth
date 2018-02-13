@@ -6,18 +6,27 @@ import android.widget.ListView;
 
 import com.bill_auth.merakions.bill_auth.adapters.CustomListViewAdapter;
 import com.bill_auth.merakions.bill_auth.beanclasses.BillItem;
+import com.bill_auth.merakions.bill_auth.utils.Constants;
+import com.bill_auth.merakions.bill_auth.utils.Utilities;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Shopkeeperdocview extends AppCompatActivity {
+public class Shopkeeperdocview extends AppCompatActivity implements CustomListViewAdapter.onCustomListViweAdapterItemClick {
     ListView listView;
     CustomListViewAdapter customListViewAdapter;
+    private ArrayList<BillItem> billList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopkeeperdocview);
-        ArrayList<BillItem> billList=new ArrayList<>();
+        billList=new ArrayList<>();
 
         listView= findViewById(R.id.doclist);
 
@@ -33,8 +42,29 @@ public class Shopkeeperdocview extends AppCompatActivity {
         billList.add(List4);
         billList.add(List5);
 
-        CustomListViewAdapter adapter = new CustomListViewAdapter(this,billList);
+        CustomListViewAdapter adapter = new CustomListViewAdapter(this,billList,true,this);
         listView.setAdapter(adapter);
 
+    }
+
+    @Override
+    public void onAdapterItemClicked(int position) {
+        verifyBill(position);
+    }
+
+    private void verifyBill(int position){
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child(Constants.CHILD_BILLS)
+                .child(billList.get(position).getSenderUid()).child(Utilities.getUid(this));
+        dbRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }

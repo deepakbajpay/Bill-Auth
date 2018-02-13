@@ -10,7 +10,7 @@ import com.bill_auth.merakions.bill_auth.beanclasses.BillItem;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BillHistoryActivity extends AppCompatActivity {
+public class BillHistoryActivity extends AppCompatActivity implements CustomListViewAdapter.onCustomListViweAdapterItemClick {
     ListView listView;
     CustomListViewAdapter customListViewAdapter;
     @Override
@@ -33,8 +33,13 @@ public class BillHistoryActivity extends AppCompatActivity {
         billList.add(List4);
         billList.add(List5);
 
-        CustomListViewAdapter adapter = new CustomListViewAdapter(this,billList);
+        CustomListViewAdapter adapter = new CustomListViewAdapter(this,billList,true,this);
         listView.setAdapter(adapter);
+
+    }
+
+    @Override
+    public void onAdapterItemClicked(int position) {
 
     }
 }

@@ -22,12 +22,13 @@ import java.util.List;
 public class CustomListViewAdapter extends BaseAdapter {
      public Context mContext;
      public  ArrayList<BillItem> bills ;
-
+    onCustomListViweAdapterItemClick callback;
      public static LayoutInflater inflater=null;
 
-     public CustomListViewAdapter(Context context, ArrayList<BillItem> data){
+     public CustomListViewAdapter(Context context, ArrayList<BillItem> data,boolean showTick,onCustomListViweAdapterItemClick callback){
          mContext =context;
          bills=data;
+         this.callback = callback;
          inflater=(LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
      }
     @Override
@@ -46,22 +47,35 @@ public class CustomListViewAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup viewGroup) {
+    public View getView(final int position, View convertView, ViewGroup viewGroup) {
          View view= convertView;
          if (convertView==null)
              view=inflater.inflate(R.layout.list_row,null);
              TextView billnumber=view.findViewById(R.id.billnumber);
              TextView billdate=view.findViewById(R.id.billdate);
              ImageView verify=view.findViewById(R.id.verify);
-             BillItem mbills;
+             final BillItem mbills;
              mbills=bills.get(position);
 
-             billdate.setText(mbills.getBilldate());
+             billdate.setText(mbills.getTimestamp()+"");
              billnumber.setText(mbills.getBillnumber());
              if (mbills.getVerify())
-                 verify.setVisibility(View.VISIBLE);
+                 verify.setImageResource(R.drawable.ic_verified);
              else
-                 verify.setVisibility(View.GONE);
+                 verify.setImageResource(R.drawable.ic_not_verified);
+
+             verify.setOnClickListener(new View.OnClickListener() {
+                 @Override
+                 public void onClick(View view) {
+                     if (!mbills.getVerify()){
+                         callback.onAdapterItemClicked(position);
+                     }
+                 }
+             });
          return view;
+    }
+
+    public interface onCustomListViweAdapterItemClick{
+         public void onAdapterItemClicked(int position);
     }
 }

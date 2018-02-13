@@ -5,15 +5,49 @@ package com.bill_auth.merakions.bill_auth.beanclasses;
  */
 
 public class BillItem {
+    public BillItem() {
+
+    }
+
     public BillItem(String billnumber, String billdate, Boolean verify) {
         this.billnumber = billnumber;
-        this.billdate = billdate;
+        this.billUrl = billdate;
         this.verify = verify;
+
     }
 
     String billnumber;
-    String billdate;
+    String billUrl;
     Boolean verify;
+    long timestamp;
+
+    public String getSenderUid() {
+        return senderUid;
+    }
+
+    public void setSenderUid(String senderUid) {
+        this.senderUid = senderUid;
+    }
+
+    public String getReceiverUid() {
+        return receiverUid;
+    }
+
+    public void setReceiverUid(String receiverUid) {
+        this.receiverUid = receiverUid;
+    }
+
+    String senderUid;
+    String receiverUid;
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
+
 
     public String getBillnumber() {
         return billnumber;
@@ -23,12 +57,12 @@ public class BillItem {
         this.billnumber = billnumber;
     }
 
-    public String getBilldate() {
-        return billdate;
+    public String getBillUrl() {
+        return billUrl;
     }
 
-    public void setBilldate(String billdate) {
-        this.billdate = billdate;
+    public void setBillUrl(String billdate) {
+        this.billUrl = billdate;
     }
 
     public Boolean getVerify() {
