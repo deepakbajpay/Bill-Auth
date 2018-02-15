@@ -46,8 +46,9 @@ public class Shopkeeperdocview extends AppCompatActivity implements CustomListVi
         billList.add(List4);
         billList.add(List5);
 
-        CustomListViewAdapter adapter = new CustomListViewAdapter(this,billList,true,this);
-        listView.setAdapter(adapter);
+        customListViewAdapter = new CustomListViewAdapter(this,billList,true,this);
+        listView.setAdapter(customListViewAdapter);
+        fetchBills();
 
     }
 
@@ -56,16 +57,23 @@ public class Shopkeeperdocview extends AppCompatActivity implements CustomListVi
         verifyBill(position);
     }
 
-    private void verifyBill(int position){
+    private void verifyBill(int position) {
+
+    }
+
+    private void fetchBills(){
         billList.clear();
         DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child(Constants.CHILD_BILLS);
         dbRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
+                System.out.println("Shopkeeperdocview.onChildAdded datasnapshot " +dataSnapshot);
                 for (DataSnapshot ds: dataSnapshot.getChildren()){
+                    System.out.println("Shopkeeperdocview.onChildAdded ds " + ds);
                     if (ds.getKey().equals(uid)){
                         for (DataSnapshot ds1: ds.getChildren()){
+                            System.out.println("Shopkeeperdocview.onChildAdded " + ds1);
                             BillItem billItem = ds1.getValue(BillItem.class);
                             billList.add(billItem);
                         }
