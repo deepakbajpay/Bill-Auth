@@ -161,7 +161,7 @@ public class ActivityLogin extends AppCompatActivity implements View.OnClickList
 
                     user.setuId(uid);
                     Utilities.saveUserDetails(ActivityLogin.this, user);
-
+                    Utilities.setUserType(ActivityLogin.this,Constants.WHOLE_SALER);
                     hideAvi();
                     Intent intent = new Intent(ActivityLogin.this, WholeMainactivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -195,7 +195,7 @@ public class ActivityLogin extends AppCompatActivity implements View.OnClickList
                         user = new UserItem();
                     user.setuId(uid);
                     Utilities.saveUserDetails(ActivityLogin.this, user);
-
+                    Utilities.setUserType(ActivityLogin.this,Constants.SHOP_KEEPER);
 
                     hideAvi();
                     Intent intent = new Intent(ActivityLogin.this, ShopKeeperMainActivity.class);

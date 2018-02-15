@@ -3,8 +3,12 @@ package com.bill_auth.merakions.bill_auth;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+
+import com.bill_auth.merakions.bill_auth.utils.Utilities;
 
 public class ShopKeeperMainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -46,6 +50,23 @@ public class ShopKeeperMainActivity extends AppCompatActivity implements View.On
                 Intent intent3=new Intent(this,ContactSelectActivity.class);
                 startActivity(intent3);
                 break;
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.context_menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.logout:
+                Utilities.logout(this);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }

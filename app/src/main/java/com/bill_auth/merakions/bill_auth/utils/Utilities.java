@@ -1,6 +1,8 @@
 package com.bill_auth.merakions.bill_auth.utils;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -9,6 +11,7 @@ import android.support.v4.content.ContextCompat;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bill_auth.merakions.bill_auth.R;
+import com.bill_auth.merakions.bill_auth.UserSelectActivity;
 import com.bill_auth.merakions.bill_auth.beanclasses.UserItem;
 
 import java.io.File;
@@ -31,7 +34,6 @@ public class Utilities {
         mPref.putString(Constants.USER_PREF_EMAIL, userItem.getEmail());
         mPref.putString(Constants.USER_PREF_MOBILE, userItem.getMobile());
         mPref.putString(Constants.USER_PREF_ADDRESS, userItem.getAddress());
-        mPref.putString(Constants.PREF_USER_TYPE, Constants.WHOLE_SALER);
         mPref.apply();
     }
 
@@ -54,6 +56,11 @@ public class Utilities {
     public static String getUserType(Context context) {
         SharedPreferences mPref = context.getSharedPreferences(Constants.WHOLE_SALER_PREF_TAG, Context.MODE_PRIVATE);
         return mPref.getString(Constants.PREF_USER_TYPE, "");
+    }
+
+    public static void setUserType(Context context, String userType){
+        context.getSharedPreferences(Constants.WHOLE_SALER_PREF_TAG, Context.MODE_PRIVATE).edit()
+                .putString(Constants.PREF_USER_TYPE,userType).apply();
     }
 
     public static void clearSharedPrefs(Context context){
@@ -113,6 +120,15 @@ public class Utilities {
         }
         return true;
 
+    }
+
+    public static void logout(Context context) {
+        Utilities.clearSharedPrefs(context);
+        Intent intent = new Intent(context, UserSelectActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        context.startActivity(intent);
+        ((Activity)context).finish();
     }
 
 }

@@ -6,8 +6,10 @@ import android.widget.ListView;
 
 import com.bill_auth.merakions.bill_auth.adapters.CustomListViewAdapter;
 import com.bill_auth.merakions.bill_auth.beanclasses.BillItem;
+import com.bill_auth.merakions.bill_auth.beanclasses.UserItem;
 import com.bill_auth.merakions.bill_auth.utils.Constants;
 import com.bill_auth.merakions.bill_auth.utils.Utilities;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,12 +23,14 @@ public class Shopkeeperdocview extends AppCompatActivity implements CustomListVi
     ListView listView;
     CustomListViewAdapter customListViewAdapter;
     private ArrayList<BillItem> billList;
+    String uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopkeeperdocview);
         billList=new ArrayList<>();
+        uid = Utilities.getUid(this);
 
         listView= findViewById(R.id.doclist);
 
@@ -53,11 +57,36 @@ public class Shopkeeperdocview extends AppCompatActivity implements CustomListVi
     }
 
     private void verifyBill(int position){
-        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child(Constants.CHILD_BILLS)
-                .child(billList.get(position).getSenderUid()).child(Utilities.getUid(this));
-        dbRef.addValueEventListener(new ValueEventListener() {
+        billList.clear();
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child(Constants.CHILD_BILLS);
+        dbRef.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                for (DataSnapshot ds: dataSnapshot.getChildren()){
+                    if (ds.getKey().equals(uid)){
+                        for (DataSnapshot ds1: ds.getChildren()){
+                            BillItem billItem = ds1.getValue(BillItem.class);
+                            billList.add(billItem);
+                        }
+                    }
+                }
+
+                customListViewAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
             }
 

@@ -77,7 +77,6 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         imageList = new ArrayList<>();
         selectedFiles = new ArrayList<>();
         downloadUrls = new HashMap<>();
-        recieverUid = Utilities.getUid(this);
 
         uploadPhotosRv = findViewById(R.id.upload_photos_rv);
         uploadDocumentsRv = findViewById(R.id.upload_documents_rv);
