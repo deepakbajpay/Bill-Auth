@@ -123,6 +123,7 @@ public class ContactSelectActivity extends AppCompatActivity implements View.OnC
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                showAvi();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     UserItem userItem = ds.getValue(UserItem.class);
                     ContactItem contactItem = new ContactItem();
