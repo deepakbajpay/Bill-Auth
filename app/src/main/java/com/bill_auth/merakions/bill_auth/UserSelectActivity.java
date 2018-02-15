@@ -28,6 +28,8 @@ public class UserSelectActivity extends AppCompatActivity implements View.OnClic
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             intent.putExtra(Constants.USER_TYPE_TAG, userType);
+            startActivity(intent);
+            finish();
         } else if (Constants.WHOLE_SALER.equals(userType)) {
             Intent intent = new Intent(this, WholeMainactivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

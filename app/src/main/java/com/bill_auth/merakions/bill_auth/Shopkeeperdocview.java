@@ -57,7 +57,7 @@ public class Shopkeeperdocview extends AppCompatActivity implements CustomListVi
 
         setContentView(R.layout.activity_shopkeeperdocview);
         billList = new ArrayList<>();
-       
+
         avl = findViewById(R.id.avi_search);
 
         uid = Utilities.getUid(this);
@@ -180,8 +180,6 @@ public class Shopkeeperdocview extends AppCompatActivity implements CustomListVi
 
                 if (response.isSuccessful()) {
                     if (isExternalStorageWritable()) {
-                        String[] fileSplit = downloadUrl.split("\\.");
-                        final String fileExt = fileSplit[fileSplit.length - 1];
 
                         downloadFileAsync = new AsyncTask<Void, Integer, Boolean>() {
                             @Override
@@ -221,7 +219,7 @@ public class Shopkeeperdocview extends AppCompatActivity implements CustomListVi
                                         }
 
                                         try {
-                                            OutputStream os = EncriptionHandeler.decrypt("myKeyisThis",outputStream);
+                                            OutputStream os = EncriptionHandeler.decrypt("squirrel123",outputStream);
                                             outputStream.flush();
                                         } catch (Throwable throwable) {
                                             throwable.printStackTrace();

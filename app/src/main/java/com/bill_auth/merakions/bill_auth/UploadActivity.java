@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -41,14 +42,27 @@ import com.wang.avi.AVLoadingIndicatorView;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.crypto.Cipher;
+import javax.crypto.CipherInputStream;
+import javax.crypto.CipherOutputStream;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.DESKeySpec;
 
 import droidninja.filepicker.FilePickerBuilder;
 import droidninja.filepicker.FilePickerConst;
@@ -73,6 +87,19 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
     private String recieverUid;
     private int i;
 
+    ArrayList<String> encryptedFilePaths;
+
+    public static void doCopy(InputStream is, OutputStream os) throws IOException {
+        byte[] bytes = new byte[64];
+        int numBytes;
+        while ((numBytes = is.read(bytes)) != -1) {
+            os.write(bytes, 0, numBytes);
+        }
+        os.flush();
+        os.close();
+        is.close();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,6 +110,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         imageList = new ArrayList<>();
         selectedFiles = new ArrayList<>();
         downloadUrls = new HashMap<>();
+        encryptedFilePaths = new ArrayList<>();
 
         uploadPhotosRv = findViewById(R.id.upload_photos_rv);
         uploadDocumentsRv = findViewById(R.id.upload_documents_rv);
@@ -116,7 +144,6 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         avl.smoothToShow();
     }
 
-
     private void hideAvi() {
         uploadButton.setVisibility(View.VISIBLE);
         avl.smoothToHide();
@@ -131,6 +158,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
                 list.addAll(selectedFiles);
                 i = 0;
                 uploadFromUri(list);
+//                doTheMagic(list);
                 break;
         }
     }
@@ -417,30 +445,169 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         uploadAllMessagesTv.setText(getString(R.string.max_upload_limit_formatted, df.format(number)));
     }
 
+    private void doTheMagic(ArrayList<String> fileUris) {
+        encrypt(fileUris.get(0));
+        decrypt(Environment.getExternalStoragePublicDirectory(Constants.APP_NAME) + "/EncryptedFiles/MyBill.jpg");
+           /* try {
+                Uri fileUri;
+                showAvi();
+                if (Build.VERSION.SDK_INT < 24)
+                    fileUri = Uri.fromFile(new File(fileUris.get(i)));
+                else
+                    fileUri = FileProvider.getUriForFile(this,
+                            this.getApplicationContext().getPackageName() + ".com.bill_auth.merakions.bill_auth.provider", new File(fileUris.get(i)));
+                InputStream is = null;
+                try {
+                    is = this.getContentResolver().openInputStream(fileUri);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                InputStream inputStream;
+                try {
+                    inputStream = EncriptionHandeler.encrypt("myKeyisThis", is);
+                } catch (Throwable throwable) {
+                    throwable.printStackTrace();
+                    return;
+                }
+            }
+        }*/
 
-    private void uploadFromUri(final ArrayList<String> fileUris) {
+    }
+
+    private File encrypt(String path) {
+
+        try {
+            String key = "squirrel123"; // needs to be at least 8 characters for DES
+
+            FileInputStream is = new FileInputStream(new File(path));
+
+            String newFilePath =  Environment.getExternalStoragePublicDirectory(Constants.APP_NAME) + "/EncryptedFiles" ;
+            File directory = new File(Environment.getExternalStoragePublicDirectory(Constants.APP_NAME) + "/EncryptedFiles");
+            if (!directory.exists()) {
+                try {
+                    directory.mkdir();
+                } catch (Exception e) {
+                    e.getCause();
+                    return null;
+                }
+            }
+
+            File file = new File(newFilePath,"MyBill.jpg");
+            FileOutputStream os = new FileOutputStream(file);
+
+            DESKeySpec dks = new DESKeySpec(key.getBytes());
+            SecretKeyFactory skf = SecretKeyFactory.getInstance("DES");
+            SecretKey desKey = skf.generateSecret(dks);
+            Cipher cipher = Cipher.getInstance("DES"); // DES/ECB/PKCS5Padding for SunJCE
+
+
+            cipher.init(Cipher.ENCRYPT_MODE, desKey);
+            CipherInputStream cis = new CipherInputStream(is, cipher);
+
+            byte[] bytes = new byte[64];
+            int numBytes;
+            while ((numBytes = is.read(bytes)) != -1) {
+                os.write(bytes, 0, numBytes);
+            }
+            os.flush();
+            os.close();
+            is.close();
+
+            return file;
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (InvalidKeySpecException e) {
+            e.printStackTrace();
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+
+
+    }
+
+    private void decrypt(String path) {
+
+        String key = "squirrel123";
+
+        String newFilePath =  Environment.getExternalStoragePublicDirectory(Constants.APP_NAME) + "/DecryptedFiles" ;
+        File directory = new File(Environment.getExternalStoragePublicDirectory(Constants.APP_NAME) + "/DecryptedFiles");
+        if (!directory.exists()) {
+            try {
+                directory.mkdir();
+            } catch (Exception e) {
+                e.getCause();
+                return;
+            }
+        }
+
+        Uri fileUri;
+        showAvi();
+        if (Build.VERSION.SDK_INT < 24)
+            fileUri = Uri.fromFile(new File(path));
+        else
+            fileUri = FileProvider.getUriForFile(this,
+                    this.getApplicationContext().getPackageName() + ".com.bill_auth.merakions.bill_auth.provider", new File(path));
+
+
+        try {
+            DESKeySpec dks = new DESKeySpec(key.getBytes());
+            SecretKeyFactory skf = SecretKeyFactory.getInstance("DES");
+            SecretKey desKey = skf.generateSecret(dks);
+            Cipher cipher = Cipher.getInstance("DES"); // DES/ECB/PKCS5Padding for SunJCE
+
+            FileInputStream fis2 = new FileInputStream(new File(path));
+            FileOutputStream fos2 = new FileOutputStream(new File(newFilePath,"myBill.jpg"));
+
+            cipher.init(Cipher.DECRYPT_MODE, desKey);
+            CipherOutputStream cos = new CipherOutputStream(fos2, cipher);
+            doCopy(fis2, cos);
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (InvalidKeySpecException e) {
+            e.printStackTrace();
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    private void uploadFromUri(final ArrayList<String> filePaths) {
         mStorageRef = FirebaseStorage.getInstance().getReference();
 
+        File file = encrypt(filePaths.get(0));
+        String mpath = Environment.getExternalStoragePublicDirectory(Constants.APP_NAME) + "/EncryptedFiles/MyBill.jpg";
         try {
             Uri fileUri;
             showAvi();
             if (Build.VERSION.SDK_INT < 24)
-                fileUri = Uri.fromFile(new File(fileUris.get(i)));
+                fileUri = Uri.fromFile(file);
             else
                 fileUri = FileProvider.getUriForFile(this,
-                        this.getApplicationContext().getPackageName() + ".com.bill_auth.merakions.bill_auth.provider", new File(fileUris.get(i)));
-            InputStream is = this.getContentResolver().openInputStream(fileUri);
-            InputStream inputStream;
-            try {
-                inputStream = EncriptionHandeler.encrypt("myKeyisThis", is);
-            } catch (Throwable throwable) {
-                throwable.printStackTrace();
-                return;
-            }
+                        this.getApplicationContext().getPackageName() + ".com.bill_auth.merakions.bill_auth.provider"
+                        , file);
+//            InputStream is = this.getContentResolver().openInputStream(fileUri);
+
+//            try {
+//                inputStream = EncriptionHandeler.encrypt("squirrel123", is);
+//            } catch (Throwable throwable) {
+//                throwable.printStackTrace();
+//                return;
+//            }
             final StorageReference photoRef = mStorageRef.child("bills").child(Utilities.getUid(this))
                     .child(fileUri.getLastPathSegment());
 
-            photoRef.putStream(inputStream)
+            photoRef.putFile(fileUri)
                     .addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -457,9 +624,9 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
                             billItem.setReceiverUid(recieverUid);
                             downloadUrls.put(getDate() + "", billItem);
 
-                            if (i < fileUris.size() - 1) {
+                            if (i < filePaths.size() - 1) {
                                 i++;
-                                uploadFromUri(fileUris);
+                                uploadFromUri(filePaths);
                             } else {
                                 mapFileNamesAndReciever(recieverUid);
                             }
@@ -515,8 +682,6 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         Calendar calendar = Calendar.getInstance();
         return calendar.getTimeInMillis();
     }
-
-
 
 
 }
