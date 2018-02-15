@@ -71,6 +71,14 @@
                 android:background="#701CB7CD"
                 android:textColor="#0000" />
 
+            <Button
+                android:id="@+id/generate_key_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/gstP"
+                android:layout_centerHorizontal="true"
+                android:text="Generate"/>
+
 
         </RelativeLayout>
 
