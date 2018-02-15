@@ -41,7 +41,7 @@ public class ContactSelectActivity extends AppCompatActivity implements View.OnC
         searchClickIv = findViewById(R.id.searchclick);
         searchEnterEt = findViewById(R.id.searchenter);
         searchClickIv.setOnClickListener(this);
-        avl = findViewById(R.id.avi_login);
+        avl = findViewById(R.id.avi_search);
         contactlist = new ArrayList<>();
 
         listView = findViewById(R.id.doclist);
