@@ -34,6 +34,7 @@ public class Constants {
 
     public static final String UPLOAD_DIRECTORY_NAME = "Uploads";
     public static final String UPLOAD_DIRECTORY_PATH = Environment.getExternalStoragePublicDirectory(Constants.APP_NAME) + "/" + Constants.UPLOAD_DIRECTORY_NAME;
+    public static final String DOWNLOAD_REPORTS_DIRECTORY_PATH = Environment.getExternalStorageDirectory() + "/" + Constants.APP_NAME + "/" + "Downloaded Reports";
 
     public static final int CAMERA_PERMISSION_CODE = 1001;
     public static final int DOCUMENT_PIC_PERMISSION_CODE = 1002;

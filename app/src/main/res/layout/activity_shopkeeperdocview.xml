@@ -20,7 +20,7 @@
             android:layout_marginBottom="@dimen/dimen_4dp"
             android:layout_toLeftOf="@+id/searchclick"
             android:padding="8dp"
-            android:hint="search here"></EditText>
+            android:hint="search here"/>
         <ImageView
             android:id="@+id/searchclick"
             android:layout_width="wrap_content"
@@ -28,8 +28,17 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:src="@drawable/ic_research"
-            ></ImageView>
-        >
+            />
+
+
+        <ProgressBar
+            android:id="@+id/download_progress_bar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:indeterminate="true"
+            android:visibility="gone" />
     </RelativeLayout>
 
 
@@ -42,9 +51,7 @@
         android:divider="#ff7ab59c"
         android:dividerHeight="1dp"
         android:listSelector="@drawable/list_selector"
-
-
-        ></ListView>
+        />
     <com.wang.avi.AVLoadingIndicatorView
         android:id="@+id/avi_search"
         android:layout_width="wrap_content"

@@ -24,6 +24,7 @@ import com.bill_auth.merakions.bill_auth.adapters.AddDocumentsAdapter;
 import com.bill_auth.merakions.bill_auth.adapters.AddPhotoAdapter;
 import com.bill_auth.merakions.bill_auth.beanclasses.BillItem;
 import com.bill_auth.merakions.bill_auth.utils.Constants;
+import com.bill_auth.merakions.bill_auth.utils.EncriptionHandeler;
 import com.bill_auth.merakions.bill_auth.utils.FileUtil;
 import com.bill_auth.merakions.bill_auth.utils.NotificationHandler;
 import com.bill_auth.merakions.bill_auth.utils.Utilities;
@@ -39,7 +40,10 @@ import com.google.firebase.storage.UploadTask;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -55,6 +59,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
     AddDocumentsAdapter addDocumentsAdapter;
     DecimalFormat df = new DecimalFormat("0.00");
     Map<String, BillItem> downloadUrls;
+    AVLoadingIndicatorView avl;
     private RecyclerView uploadPhotosRv, uploadDocumentsRv;
     private Button uploadButton;
     private ArrayList<String> imageList;
@@ -67,7 +72,6 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
     private StorageReference mStorageRef;
     private String recieverUid;
     private int i;
-    AVLoadingIndicatorView avl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +110,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
 
 
     }
+
     private void showAvi() {
         uploadButton.setVisibility(View.GONE);
         avl.smoothToShow();
@@ -417,8 +422,6 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         mStorageRef = FirebaseStorage.getInstance().getReference();
 
         try {
-
-
             Uri fileUri;
             showAvi();
             if (Build.VERSION.SDK_INT < 24)
@@ -426,11 +429,18 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
             else
                 fileUri = FileProvider.getUriForFile(this,
                         this.getApplicationContext().getPackageName() + ".com.bill_auth.merakions.bill_auth.provider", new File(fileUris.get(i)));
-
+            InputStream is = this.getContentResolver().openInputStream(fileUri);
+            InputStream inputStream;
+            try {
+                inputStream = EncriptionHandeler.encrypt("myKeyisThis", is);
+            } catch (Throwable throwable) {
+                throwable.printStackTrace();
+                return;
+            }
             final StorageReference photoRef = mStorageRef.child("bills").child(Utilities.getUid(this))
                     .child(fileUri.getLastPathSegment());
 
-            photoRef.putFile(fileUri)
+            photoRef.putStream(inputStream)
                     .addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -445,7 +455,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
                             billItem.setVerify(false);
                             billItem.setSenderUid(Utilities.getUid(UploadActivity.this));
                             billItem.setReceiverUid(recieverUid);
-                            downloadUrls.put(getDate()+"",billItem);
+                            downloadUrls.put(getDate() + "", billItem);
 
                             if (i < fileUris.size() - 1) {
                                 i++;
@@ -492,7 +502,8 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
-            public void onFailure(@NonNull Exception e) {hideAvi();
+            public void onFailure(@NonNull Exception e) {
+                hideAvi();
 
                 Log.e("mapFiles", e.getLocalizedMessage());
                 Toast.makeText(UploadActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
@@ -504,5 +515,8 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         Calendar calendar = Calendar.getInstance();
         return calendar.getTimeInMillis();
     }
+
+
+
 
 }

@@ -40,7 +40,6 @@ public class FileUtil {
 //                e.printStackTrace();
 //            }
 //        }
-        System.out.println("FileUtil.from " + uri);
         InputStream inputStream = context.getContentResolver().openInputStream(uri);
         String fileName = getFileName(context, uri);
         String[] splitName = splitFileName(fileName);
