@@ -15,25 +15,22 @@
             android:id="@+id/searchenter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dimen_4dp"
+            android:layout_marginRight="@dimen/dimen_4dp"
+            android:layout_marginBottom="@dimen/dimen_4dp"
+            android:layout_toLeftOf="@+id/searchclick"
             android:padding="8dp"
-            android:text="search here"></EditText>
+            android:hint="search here"></EditText>
         <ImageView
             android:id="@+id/searchclick"
             android:layout_width="wrap_content"
+            android:layout_margin="@dimen/dimen_4dp"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:src="@drawable/ic_research"
             ></ImageView>
         >
     </RelativeLayout>
-    <com.wang.avi.AVLoadingIndicatorView
-        android:id="@+id/avi_login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone"
-        app:indicatorColor="@color/colorPrimary"
-        app:indicatorName="BallPulseSyncIndicator" />
 
 
 
@@ -48,4 +45,13 @@
 
 
         ></ListView>
+    <com.wang.avi.AVLoadingIndicatorView
+        android:id="@+id/avi_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        app:indicatorColor="@color/colorPrimary"
+        app:indicatorName="BallPulseSyncIndicator" />
+
 </RelativeLayout>

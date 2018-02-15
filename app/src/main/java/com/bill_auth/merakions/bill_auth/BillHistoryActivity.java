@@ -6,18 +6,21 @@ import android.widget.ListView;
 
 import com.bill_auth.merakions.bill_auth.adapters.CustomListViewAdapter;
 import com.bill_auth.merakions.bill_auth.beanclasses.BillItem;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class BillHistoryActivity extends AppCompatActivity implements CustomListViewAdapter.onCustomListViweAdapterItemClick {
     ListView listView;
+
     CustomListViewAdapter customListViewAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopkeeperdocview);
         ArrayList<BillItem> billList=new ArrayList<>();
+
 
         listView= findViewById(R.id.doclist);
 

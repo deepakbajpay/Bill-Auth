@@ -18,6 +18,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
 
@@ -30,7 +31,7 @@ public class ContactSelectActivity extends AppCompatActivity implements View.OnC
     EditText searchEnterEt;
     ImageView searchClickIv;
     CustomListViewAdapterConatactSelector customListViewAdapter;
-
+    AVLoadingIndicatorView avl;
     ArrayList<ContactItem> contactlist;
 
     @Override
@@ -40,7 +41,7 @@ public class ContactSelectActivity extends AppCompatActivity implements View.OnC
         searchClickIv = findViewById(R.id.searchclick);
         searchEnterEt = findViewById(R.id.searchenter);
         searchClickIv.setOnClickListener(this);
-
+        avl = findViewById(R.id.avi_search);
         contactlist = new ArrayList<>();
 
         listView = findViewById(R.id.doclist);
@@ -63,8 +64,21 @@ public class ContactSelectActivity extends AppCompatActivity implements View.OnC
 
     }
 
+    private void showAvi() {
+        searchClickIv.setVisibility(View.GONE);
+        avl.smoothToShow();
+    }
+
+
+    private void hideAvi() {
+        searchClickIv.setVisibility(View.VISIBLE);
+        avl.smoothToHide();
+    }
+
+
     private void fetchShopkeeprs() {
         contactlist.clear();
+        showAvi();
         DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child(Constants.CHILD_SHOP_KEEPER);
         dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -78,10 +92,12 @@ public class ContactSelectActivity extends AppCompatActivity implements View.OnC
                     contactlist.add(contactItem);
                 }
                 customListViewAdapter.notifyDataSetChanged();
+                hideAvi();
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+                hideAvi();
 
             }
         });
@@ -101,11 +117,13 @@ public class ContactSelectActivity extends AppCompatActivity implements View.OnC
     private void searchShopKeeper(String keyword) {
         Toast.makeText(this, "Searching for" + keyword, Toast.LENGTH_SHORT).show();
         contactlist.clear();
+        showAvi();
         DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child(Constants.CHILD_SHOP_KEEPER);
         Query query = dbRef.orderByChild("name").equalTo(keyword);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                showAvi();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     UserItem userItem = ds.getValue(UserItem.class);
                     ContactItem contactItem = new ContactItem();
@@ -115,12 +133,13 @@ public class ContactSelectActivity extends AppCompatActivity implements View.OnC
                     contactlist.add(contactItem);
                 }
                 customListViewAdapter.notifyDataSetChanged();
+                hideAvi();
                 Toast.makeText(ContactSelectActivity.this, "Searching Complete", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                hideAvi();
             }
         });
     }

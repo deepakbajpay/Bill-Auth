@@ -36,6 +36,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.io.File;
 import java.io.IOException;
@@ -66,6 +67,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
     private StorageReference mStorageRef;
     private String recieverUid;
     private int i;
+    AVLoadingIndicatorView avl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +85,8 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         uploadButton = findViewById(R.id.upload_documents_button);
         photoAmountTv = findViewById(R.id.add_photos_amount_tv);
         documentAmountTv = findViewById(R.id.document_number_tv);
+        avl = findViewById(R.id.avi_upload);
+
 
         LinearLayoutManager addPhotoManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         uploadPhotosRv.setLayoutManager(addPhotoManager);
@@ -101,6 +105,16 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         uploadButton.setOnClickListener(this);
 
 
+    }
+    private void showAvi() {
+        uploadButton.setVisibility(View.GONE);
+        avl.smoothToShow();
+    }
+
+
+    private void hideAvi() {
+        uploadButton.setVisibility(View.VISIBLE);
+        avl.smoothToHide();
     }
 
     @Override
@@ -401,10 +415,12 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
 
     private void uploadFromUri(final ArrayList<String> fileUris) {
         mStorageRef = FirebaseStorage.getInstance().getReference();
+
         try {
 
 
             Uri fileUri;
+            showAvi();
             if (Build.VERSION.SDK_INT < 24)
                 fileUri = Uri.fromFile(new File(fileUris.get(i)));
             else
@@ -443,6 +459,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
                     .addOnFailureListener(this, new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception exception) {
+                            hideAvi();
                             // Upload failed
 
                             Log.w(null, "uploadFromUri:onFailure", exception);
@@ -471,10 +488,12 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
                 updateFileSizeText(totalFileSize);
                 NotificationHandler.pushNotificationInFirebase(Utilities.getUid(UploadActivity.this)
                         , "You have new bills", Constants.TAG_SHOP_KEEPER_ACTIVITY, recieverUid);
+                hideAvi();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
-            public void onFailure(@NonNull Exception e) {
+            public void onFailure(@NonNull Exception e) {hideAvi();
+
                 Log.e("mapFiles", e.getLocalizedMessage());
                 Toast.makeText(UploadActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
             }
