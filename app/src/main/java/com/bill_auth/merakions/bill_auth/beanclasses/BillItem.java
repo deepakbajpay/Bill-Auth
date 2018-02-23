@@ -5,6 +5,25 @@ package com.bill_auth.merakions.bill_auth.beanclasses;
  */
 
 public class BillItem {
+
+    String billnumber;
+    String billUrl;
+    Boolean verify;
+    long timestamp;
+    String senderUid;
+    String receiverUid;
+    String mimeType;
+
+    public String getExtention() {
+        return extention;
+    }
+
+    public void setExtention(String extention) {
+        this.extention = extention;
+    }
+
+    String extention;
+
     public BillItem() {
 
     }
@@ -14,12 +33,19 @@ public class BillItem {
         this.billUrl = billdate;
         this.verify = verify;
 
+
     }
 
-    String billnumber;
-    String billUrl;
-    Boolean verify;
-    long timestamp;
+
+    public String getMimeType() {
+        return mimeType;
+    }
+
+    public void setMimeType(String mimeType) {
+        this.mimeType = mimeType;
+    }
+
+
 
     public String getSenderUid() {
         return senderUid;
@@ -37,8 +63,7 @@ public class BillItem {
         this.receiverUid = receiverUid;
     }
 
-    String senderUid;
-    String receiverUid;
+
 
     public long getTimestamp() {
         return timestamp;

@@ -1,12 +1,19 @@
 package com.bill_auth.merakions.bill_auth.utils;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.webkit.MimeTypeMap;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -16,6 +23,7 @@ import com.bill_auth.merakions.bill_auth.beanclasses.UserItem;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -129,6 +137,47 @@ public class Utilities {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.startActivity(intent);
         ((Activity)context).finish();
+    }
+
+    public static boolean openFileIfExists(Context context, String fileName) {
+        File cachedFile = new File(Constants.DOWNLOAD_REPORTS_DIRECTORY_PATH, fileName);
+        if (cachedFile.exists()) {
+            if (Build.VERSION.SDK_INT >= 24) {
+                try {
+                    Method m = StrictMode.class.getMethod("disableDeathOnFileUriExposure");
+                    m.invoke(null);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            Uri fileUri = Uri.fromFile(cachedFile);
+            intent.setDataAndType(fileUri, getMimeType(context, fileUri));
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            try {
+                context.startActivity(intent);
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(context, "No application found that can open this file", Toast.LENGTH_LONG).show();
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    public static String getMimeType(Context context, Uri uri) {
+        String mimeType;
+        if (uri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
+            ContentResolver cr = context.getContentResolver();
+            mimeType = cr.getType(uri);
+        } else {
+            String fileExtension = MimeTypeMap.getFileExtensionFromUrl(uri
+                    .toString());
+            mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
+                    fileExtension.toLowerCase());
+        }
+        return mimeType;
     }
 
 }

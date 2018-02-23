@@ -60,7 +60,7 @@ public class BillHistoryActivity extends AppCompatActivity implements CustomList
         billList.add(List4);
         billList.add(List5);
 
-        CustomListViewAdapter adapter = new CustomListViewAdapter(this,billList,true,this);
+        CustomListViewAdapter adapter = new CustomListViewAdapter(this,billList,true,this,"history");
         listView.setAdapter(adapter);
 
     }
@@ -70,7 +70,15 @@ public class BillHistoryActivity extends AppCompatActivity implements CustomList
 
     }
 
+    @Override
+    public void onCancelButtonClicked(int position) {
 
+    }
+
+    @Override
+    public void onAdapterItemClickedToOpen(int position) {
+
+    }
 
 
 }

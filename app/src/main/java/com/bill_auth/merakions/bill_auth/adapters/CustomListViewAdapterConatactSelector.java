@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -56,6 +57,10 @@ public class CustomListViewAdapterConatactSelector extends BaseAdapter implement
         RelativeLayout billItemRl = view.findViewById(R.id.bill_item_rl);
         TextView contact=view.findViewById(R.id.billnumber);
         TextView contactaddress=view.findViewById(R.id.billdate);
+        ImageView cancel = view.findViewById(R.id.cancel);
+        cancel.setVisibility(View.GONE);
+        ImageView verify = view.findViewById(R.id.verify);
+        verify.setVisibility(View.GONE);
         ContactItem mcontact;
         mcontact=contacts.get(position);
 

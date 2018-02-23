@@ -1,7 +1,11 @@
 package com.bill_auth.merakions.bill_auth;
 
+import android.annotation.SuppressLint;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Environment;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -11,7 +15,6 @@ import android.widget.Toast;
 
 import com.bill_auth.merakions.bill_auth.adapters.CustomListViewAdapter;
 import com.bill_auth.merakions.bill_auth.beanclasses.BillItem;
-import com.bill_auth.merakions.bill_auth.beanclasses.UserItem;
 import com.bill_auth.merakions.bill_auth.services.RetrofitApiService;
 import com.bill_auth.merakions.bill_auth.services.RetrofitServiceUtil;
 import com.bill_auth.merakions.bill_auth.utils.Constants;
@@ -22,17 +25,26 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import javax.crypto.Cipher;
+import javax.crypto.CipherOutputStream;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.DESKeySpec;
 
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
@@ -50,6 +62,7 @@ public class Shopkeeperdocview extends AppCompatActivity implements CustomListVi
     AVLoadingIndicatorView avl;
     private AsyncTask<Void, Integer, Boolean> downloadFileAsync;
     ProgressBar downloadProgressBar;
+    private String fileName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +78,7 @@ public class Shopkeeperdocview extends AppCompatActivity implements CustomListVi
         listView = findViewById(R.id.doclist);
         downloadProgressBar = findViewById(R.id.download_progress_bar);
 
-        BillItem List1 = new BillItem("01", "11 Feb 2018", true);
+        BillItem List1 = new BillItem("Invoice", "11 Feb 2018", true);
         BillItem List2 = new BillItem("01", "23 Jun 2017", false);
         BillItem List3 = new BillItem("01", "23 Dec 2017", true);
         BillItem List4 = new BillItem("01", "1 Jan 2018", false);
@@ -77,7 +90,7 @@ public class Shopkeeperdocview extends AppCompatActivity implements CustomListVi
         billList.add(List4);
         billList.add(List5);
 
-        customListViewAdapter = new CustomListViewAdapter(this, billList, true, this);
+        customListViewAdapter = new CustomListViewAdapter(this, billList, true, this,"shopkeeper");
         listView.setAdapter(customListViewAdapter);
         showAvi();
         fetchBills();
@@ -97,8 +110,20 @@ public class Shopkeeperdocview extends AppCompatActivity implements CustomListVi
 
     @Override
     public void onAdapterItemClicked(int position) {
-        downloadReportFromUrl(billList.get(position).getBillUrl(),"MyBill.jpg",false);
+        BillItem billItem = billList.get(position);
+        downloadReportFromUrl(billItem.getBillUrl(),billItem,false);
 //        verifyBill(position);
+    }
+
+    @Override
+    public void onCancelButtonClicked(int position) {
+        billList.remove(position);
+        customListViewAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onAdapterItemClickedToOpen(int position) {
+        Utilities.openFileIfExists(this,billList.get(position).getTimestamp()+"."+billList.get(position).getExtention());
     }
 
     private void verifyBill(int position) {
@@ -153,8 +178,8 @@ public class Shopkeeperdocview extends AppCompatActivity implements CustomListVi
 
     //================++++++++++++++++++++++++++++++++++++++++=======================================
 
-    private void downloadReportFromUrl(final String downloadUrl, final String fileName, final boolean hasShare) {
-
+    private void downloadReportFromUrl(final String downloadUrl, final BillItem billItem, final boolean hasShare) {
+        fileName = billItem.getTimestamp()+"."+billItem.getExtention();
         final OkHttpClient client = new OkHttpClient().newBuilder()
                 .connectTimeout(10, TimeUnit.MINUTES)
                 .writeTimeout(10, TimeUnit.MINUTES)
@@ -170,6 +195,7 @@ public class Shopkeeperdocview extends AppCompatActivity implements CustomListVi
 
         downloadProgressBar.setVisibility(View.VISIBLE);
         service.downloadReport(downloadUrl).enqueue(new Callback<ResponseBody>() {
+            @SuppressLint("StaticFieldLeak")
             @Override
             public void onResponse(Call<ResponseBody> call, final Response<ResponseBody> response) {
 
@@ -218,14 +244,8 @@ public class Shopkeeperdocview extends AppCompatActivity implements CustomListVi
                                             total += read;
                                         }
 
-                                        try {
-                                            OutputStream os = EncriptionHandeler.decrypt("squirrel123",outputStream);
-                                            outputStream.flush();
-                                        } catch (Throwable throwable) {
-                                            throwable.printStackTrace();
-                                        }
-
-
+                                        outputStream.flush();
+                                        Utilities.openFileIfExists(Shopkeeperdocview.this,fileName);
                                         return true;
                                     } catch (IOException e) {
                                         e.printStackTrace();
@@ -290,6 +310,68 @@ public class Shopkeeperdocview extends AppCompatActivity implements CustomListVi
             return true;
         }
         return false;
+    }
+
+    private void decrypt(String path,BillItem billItem) {
+
+        String key = "squirrel123";
+
+        String newFilePath =  Environment.getExternalStoragePublicDirectory(Constants.APP_NAME) + "/DecryptedFiles" ;
+        File directory = new File(Environment.getExternalStoragePublicDirectory(Constants.APP_NAME) + "/DecryptedFiles");
+        if (!directory.exists()) {
+            try {
+                directory.mkdir();
+            } catch (Exception e) {
+                e.getCause();
+                return;
+            }
+        }
+
+        Uri fileUri;
+        showAvi();
+        if (Build.VERSION.SDK_INT < 24)
+            fileUri = Uri.fromFile(new File(path));
+        else
+            fileUri = FileProvider.getUriForFile(this,
+                    this.getApplicationContext().getPackageName() + ".com.bill_auth.merakions.bill_auth.provider", new File(path));
+
+
+        try {
+            DESKeySpec dks = new DESKeySpec(key.getBytes());
+            SecretKeyFactory skf = SecretKeyFactory.getInstance("DES");
+            SecretKey desKey = skf.generateSecret(dks);
+            Cipher cipher = Cipher.getInstance("DES"); // DES/ECB/PKCS5Padding for SunJCE
+
+            FileInputStream is = new FileInputStream(new File(path));
+            FileOutputStream os = new FileOutputStream(new File(newFilePath,billItem.getTimestamp()+"."+billItem.getExtention()));
+
+            cipher.init(Cipher.DECRYPT_MODE, desKey);
+            CipherOutputStream cos = new CipherOutputStream(os, cipher);
+
+
+            byte[] bytes = new byte[64];
+            int numBytes;
+            while ((numBytes = is.read(bytes)) != -1) {
+                os.write(bytes, 0, numBytes);
+            }
+            cos.flush();
+            cos.close();
+            is.close();
+
+
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (InvalidKeySpecException e) {
+            e.printStackTrace();
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
 }
